@@ -65,7 +65,7 @@ function registerScripts () {
     if (wantColors) {
         contentScripts.js.push(
             {
-                file: "/hljs/highlight.min.js",
+                file: "/hljs/highlight.js",
             },
             {
                 file: "/scripts/transformations.js",

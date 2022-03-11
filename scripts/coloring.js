@@ -12,42 +12,37 @@ const coloring = {
          * nodes with .hljs class between these <pre> node and their children.
          */
         const preNodes = document.querySelectorAll("body > div > pre");
+
         for (const pre of preNodes) {
-            const code = document.createElement("CODE");
 
-            code.style.padding = "0";
-            transformations.setTabStyle(code, options.tabsize);
-            code.setAttribute("class", "hljs diff");
+            for (let i = 0; i < pre.childNodes.length; i++) {
 
-            while (pre.childNodes.length > 0) {
-                code.appendChild(pre.childNodes[0]);
+                if (pre.childNodes[i].nodeName == "#text") {
+
+                    const span = document.createElement("SPAN");
+                    const new_pre = document.createElement("PRE");
+                    const code = document.createElement("CODE");
+
+                    code.style.padding = "0";
+                    transformations.setTabStyle(code, options.tabsize);
+                    code.setAttribute("class", "hljs diff");
+        
+                    code.appendChild(pre.childNodes[i]);
+                    new_pre.appendChild(code);
+                    span.appendChild(new_pre);
+                    pre.insertBefore(span, pre.childNodes[i]);
+
+                }
             }
-            pre.appendChild(code);
-        }
 
-        /*
-         * Signature handling:
-         * Search for a div with "moz-txt-sig" class set somewhere inside the plain
-         * text mail. This node holds all signatures. We will remove it from the
-         * DOM to exclude it from the highlighting and add it back afterwards.
-         */
-        let sigParentNode;
-        const signatureNodes = document.querySelectorAll("div.moz-text-plain code > div.moz-txt-sig");
-
-        if (signatureNodes.length) {
-            sigParentNode = signatureNodes[0].parentNode;
-            signatureNodes[0].remove();
         }
 
         /* Call library function, trigger highlighting */
-        hljs.configure({ ignoreUnescapedHTML: true });
+        hljs.configure({
+            ignoreUnescapedHTML: true,
+            languages: "diff"
+         });
         hljs.highlightAll();
-
-        /* Re-add signature, highlighted with "comment" color */
-        if (signatureNodes.length) {
-            signatureNodes[0].className += " hljs-comment";
-            sigParentNode.appendChild(signatureNodes[0]);
-        }
 
         /* Replace spaces and tabs if required */
         if (options.spaces) {

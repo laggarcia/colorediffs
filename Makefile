@@ -6,7 +6,7 @@ ADDON=colorediffs-$(VERSION).xpi
 JAR=/tmp/colorediffs.cookie
 HLJS_DL='https://highlightjs.org/download/'
 HLJS_ZIP=/tmp/highlight.zip
-HLJS_SCRIPT=hljs/highlight.min.js
+HLJS_SCRIPT=hljs/highlight.js
 HLJS_STYLES=hljs/styles/
 
 addon: checks xpi addons-linter
